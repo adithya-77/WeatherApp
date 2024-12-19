@@ -5,14 +5,14 @@ import LottieView from 'lottie-react-native';
 import axios from 'axios';
 
 const App = () => {
-  const [city, setCity] = useState(''); // City input
-  const [weather, setWeather] = useState(null); // Weather data
-  const [loading, setLoading] = useState(false); // Loading state
+  const [city, setCity] = useState(''); 
+  const [weather, setWeather] = useState(null); 
+  const [loading, setLoading] = useState(false); 
   const [suggestions, setSuggestions] = useState([]);
 
-  const access_key = '1dee88d22091179b1ff972fd1fbf9f26'; // Replace with your WeatherStack API key
+  const access_key = 'YOUR API KEY HERE'; 
 
-  // Fetch weather data from WeatherStack API
+  
   const fetchWeather = async () => {
     if (!city) return alert('Please enter a city name!');
     setLoading(true);
@@ -23,12 +23,12 @@ const App = () => {
       console.log(response.data);
       const data = response.data;
 
-      // Handle API errors or invalid responses
+      
       if (data.error || !data.location || !data.current) {
         alert('City not found or invalid response. Please try again!');
         setWeather(null);
       } else {
-        setWeather(data); // Update weather state
+        setWeather(data); 
       }
     } catch (error) {
       console.error('Error fetching weather:', error);
@@ -45,7 +45,7 @@ const App = () => {
       }
       
       try {
-        // Example: Fetch city suggestions based on the input
+        
         const response = await axios.get(`https://api.weatherstack.com/autocomplete?access_key=${access_key}&query=${city}`);
         const data = response.data;
         setSuggestions(data || []);
@@ -54,21 +54,21 @@ const App = () => {
       }
     };
 
-    // Delay the suggestion fetching for better UX
+    
     const timer = setTimeout(() => {
       fetchSuggestions();
     }, 500);
 
-    return () => clearTimeout(timer); // Cleanup timeout
+    return () => clearTimeout(timer); 
   }, [city]);
 
   const handleSuggestionSelect = (suggestion) => {
-    setCity(suggestion); // Set the selected city as the input
-    setSuggestions([]);  // Clear suggestions
-    fetchWeather(suggestion); // Fetch weather for selected city
+    setCity(suggestion); 
+    setSuggestions([]);  
+    fetchWeather(suggestion); 
   };
 
-  // Get the appropriate Lottie animation based on weather condition
+  
   const getWeatherAnimation = () => {
     if (!weather || !weather.current) return { uri: 'https://assets.lottiefiles.com/packages/lf20_default.json' };
     const condition = weather.current.weather_descriptions[0].toLowerCase();
